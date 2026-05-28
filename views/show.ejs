@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual notes</title>
+</head>
+<body>
+    <div>
+        <p><%=note.taskName%></p>
+         <p><%=note.Aboutthetask%></p>
+      
+          
+         <button onclick="window.location.href='/notes/<%=note.id %>/edit'">Edit your note</button>
+         <form method="POST" action="/notes/<%=note.id%>?_method=DELETE">
+      <button>Delete</button>
+   </form>
+    </div>
+</body>
+</html>
+
+
+ 

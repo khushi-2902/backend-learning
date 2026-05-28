@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Page</title>
+</head>
+<body>
+    <form method="Post" action="/notes/<%=note.edit%>?_method=PATCH">
+         <input placeholder="Enter a task name" name="taskName"     value="<%= note.taskName %>">
+         <br>
+         <textarea placeholder="Enter about your task" rows="20" cols="30" name="Aboutthetask"><%=note.Aboutthetask%></textarea>
+         <button>Submit</button>
+    </form>
+</body>
+</html>
