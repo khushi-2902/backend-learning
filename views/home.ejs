@@ -8,5 +8,23 @@
 <body>
        <h1>Hello user</h1>
         <a href="http://localhost:3000/notes/new">Create New Post</a>
+
+
+        <%for(task of notes)
+
+        {%>
+        <div>
+            <h2><%=task.taskName%></h2>
+            <div class="notes-info">
+                <p><%=task.Aboutthetask%></p>
+                <p><%=task.id%></p>
+            </div>
+            <button onclick="window.location.href='/notes/<%=task.id%>'">
+        See the notes in detail..
+   </button>
+   
+  </div>
+
+    <% } %>
 </body>
 </html>

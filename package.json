@@ -2,7 +2,10 @@
   "dependencies": {
     "ejs": "^5.0.2",
     "express": "^5.2.1",
-    "nodemon": "^3.1.14"
+    "method-override": "^3.0.0",
+    "nodemon": "^3.1.14",
+    "uuid": "^14.0.0",
+    "uuid4": "^2.0.3"
   },
   "name": "mybackendtask",
   "version": "1.0.0",

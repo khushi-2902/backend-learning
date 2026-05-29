@@ -112,3 +112,7 @@ app.delete("/notes/:id",(req,res)=>
 
 
 
+app.post("/upload",(req,res)=>
+{
+    console.log(req.body);
+})
