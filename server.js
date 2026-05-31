@@ -5,7 +5,7 @@ const methodOverride = require('method-override');
 const multer=require("multer");
 const crypto=require("crypto");
 
-
+app.use(express.static("public"));
 
 app.use(methodOverride("_method"));
 
@@ -50,7 +50,9 @@ app.post("/uploads",upload.single('image'),(req,res)=>
 {
 
     console.log(req.file);
-     res.send("file upload successfully");
+    let image=req.file.filename;
+    res.render("image.ejs",{image});
+     console.log("file upload successfully");
 })
 
 
@@ -59,11 +61,13 @@ let notes=[
         id:uuidv4(),
         taskName:"wake up at 5:00",
         Aboutthetask:"have to study for upcoming ete",
+          image: "download.jpg",
     },
     {
           id:uuidv4(),
           taskName:"got to the gym ",
-        Aboutthetask:"have to improve thehealth for the wedding"
+        Aboutthetask:"have to improve thehealth for the wedding",
+          image: "download.jpg",
     }
 ]
 
@@ -81,14 +85,17 @@ app.get("/notes/new",(req,res)=>
 
 
 //postRoute
-app.post("/notes",(req,res)=>
+app.post("/notes",upload.single('image'),(req,res)=>
 {
 
     let {taskName,Aboutthetask}=req.body;
+    let image=req.file.filename;
     let id=uuidv4();
-    notes.push({id,taskName,Aboutthetask});
+    notes.push({id,taskName,Aboutthetask,image});
     console.log("post submitted successfully");
+      console.log("file upload successfully");
     res.redirect('/notes');
+   
 
 });
 

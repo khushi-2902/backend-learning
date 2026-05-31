@@ -9,10 +9,11 @@
     <div>
         <p><%=note.taskName%></p>
          <p><%=note.Aboutthetask%></p>
-      
+           <img src="/uploads/images/<%= note.image %>" alt="Note Image" width="300">
           
          <button onclick="window.location.href='/notes/<%=note.id %>/edit'">Edit your note</button>
          <form method="POST" action="/notes/<%=note.id%>?_method=DELETE">
+
       <button>Delete</button>
    </form>
     </div>

@@ -6,12 +6,13 @@
     <title>Create a new note</title>
 </head>
 <body>
-    <form action="/notes" method="post">
+    <form action="/notes" method="post" enctype="multipart/form-data">
          <input placeholder="Enter a task name" name="taskName">
          <br>
-         <textarea placeholder="Enter about your task" row="20" cols="30" name="Aboutthetask"></textarea>
-
-         
+         <textarea placeholder="Enter about your task" rows="20" cols="30" name="Aboutthetask"></textarea>
+        <input type="file"  name="image">
+        
+        
          <button>Submit</button>
     </form>
 </body>
