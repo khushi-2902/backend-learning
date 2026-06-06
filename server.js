@@ -4,10 +4,26 @@ const path=require("path");
 const methodOverride = require('method-override');
 const multer=require("multer");
 const crypto=require("crypto");
-
+const mongoose = require("mongoose");
+const Note=require("./models/note.js");
 app.use(express.static("public"));
 
 app.use(methodOverride("_method"));
+
+
+main()
+.then(()=>{
+    console.log("Database Connected");
+})
+.catch((err)=>{
+    console.log(err);
+});
+
+async function main() {
+    await mongoose.connect("mongodb://127.0.0.1:27017/notesApp");
+}
+
+
 
 const { v4: uuidv4 } = require('uuid');
 uuidv4();
@@ -40,39 +56,54 @@ app.listen(3000,()=>
     console.log(`app is listening on port ${3000}`);
 });
 
-app.get("/uploads",(req,res)=>
-{
+//database--testingRoute
+
+// app.get("/test",async(req,res)=>{
+//       let note = new Note({
+//     taskName: "Study DBMS",
+//     Aboutthetask: "Placement Preparation",
+//     image: "sample.jpg"});
+
+//     await note.save();
+//      console.log(note);
+//      res.send("saved");
+// });
+
+
+// app.get("/uploads",(req,res)=>
+// {
     
-    res.render("notesUpload.ejs");
-})
+//     res.render("notesUpload.ejs");
+// })
 
-app.post("/uploads",upload.single('image'),(req,res)=>
+// app.post("/uploads",upload.single('image'),(req,res)=>
+// {
+
+//     console.log(req.file);
+//     let image=req.file.filename;
+//     res.render("image.ejs",{image});
+//      console.log("file upload successfully");
+// })
+
+
+// let notes=[
+//     {
+//         id:uuidv4(),
+//         taskName:"wake up at 5:00",
+//         Aboutthetask:"have to study for upcoming ete",
+//           image: "download.jpg",
+//     },
+//     {
+//           id:uuidv4(),
+//           taskName:"got to the gym ",
+//         Aboutthetask:"have to improve thehealth for the wedding",
+//           image: "download.jpg",
+//     }
+// ]
+
+app.get("/notes",async(req,res)=>
 {
-
-    console.log(req.file);
-    let image=req.file.filename;
-    res.render("image.ejs",{image});
-     console.log("file upload successfully");
-})
-
-
-let notes=[
-    {
-        id:uuidv4(),
-        taskName:"wake up at 5:00",
-        Aboutthetask:"have to study for upcoming ete",
-          image: "download.jpg",
-    },
-    {
-          id:uuidv4(),
-          taskName:"got to the gym ",
-        Aboutthetask:"have to improve thehealth for the wedding",
-          image: "download.jpg",
-    }
-]
-
-app.get("/notes",(req,res)=>
-{
+     const notes = await Note.find();
     res.render("home.ejs",{notes});
     
 });
@@ -85,15 +116,18 @@ app.get("/notes/new",(req,res)=>
 
 
 //postRoute
-app.post("/notes",upload.single('image'),(req,res)=>
+app.post("/notes",upload.single('image'),async(req,res)=>
 {
 
     let {taskName,Aboutthetask}=req.body;
     let image=req.file.filename;
     let id=uuidv4();
-    notes.push({id,taskName,Aboutthetask,image});
+
+    let note=new Note({id,taskName,Aboutthetask,image});
+    await note.save();
+    // notes.push({id,taskName,Aboutthetask,image});
     console.log("post submitted successfully");
-      console.log("file upload successfully");
+    console.log("file upload successfully");
     res.redirect('/notes');
    
 
@@ -101,33 +135,41 @@ app.post("/notes",upload.single('image'),(req,res)=>
 
 
 
-app.get("/notes/:id",(req,res)=>
+app.get("/notes/:id",async(req,res)=>
 {
     let {id}=req.params;
     // console.log("Param id");
     // console.log(id);
-    let note=notes.find((p)=> id===p.id);
+    // let note=notes.find((p)=> id===p.id);
     // console.log("find note");
     // console.log(note);
+
+      const note = await Note.findOne({ id });
     res.render("show.ejs",{note});
 
 })
 
-app.get("/notes/:id/edit",(req,res)=>{
+app.get("/notes/:id/edit",async(req,res)=>{
      let {id}=req.params;
-      let note=notes.find((p)=> id===p.id);
+    //   let note=notes.find((p)=> id===p.id);
+
+    
+      const note = await Note.findOne({ id });//now finding from the database instead of the array--note
     res.render("edit.ejs",{note});
 })
 
 
 //to update the edit form
-app.patch("/notes/:id",(req,res)=>
+app.patch("/notes/:id",async(req,res)=>
 {
     let {id}=req.params;
     let {newtaskName,newAboutthetask}=req.body;
-    let note=notes.find((p)=> id===p.id);
+    // let note=notes.find((p)=> id===p.id);
+    
+      const note = await Note.findOne({ id });
     note.taskName=newtaskName;
     note.AboutThetask=newAboutThetask;
+    note.image=image;
     res.redirect("/notes");
 });
 
@@ -148,15 +190,11 @@ app.patch("/notes/:id",(req,res)=>
 
 
 //deleteRoute
-app.delete("/notes/:id",(req,res)=>
+app.delete("/notes/:id",async(req,res)=>
 {
    let {id}=req.params;
 //    console.log(id);
-  notes=notes.filter((p)=> id!==p.id);
+ await Note.findOneAndDelete({ id });
   res.redirect("/notes");
 })
-
-
-
-
 
